@@ -77,25 +77,18 @@ class DocumentFilter(BaseModel):
 
 if __name__ == "__main__":
     params = {
-        "doc_filter": {
-            "category": [
-                "勘察"
-            ],
-            "subcategory": [
-                "通用"
-            ],
-            "type": [],
-            "state": [],
-            "keyword": [
-                "盐渍土",
-                "勘察"
-            ],
-            "name": ""
-        },
-        "spec_filter": {
-            "name": "",
-            "code": ""
-        }
+      "doc_filter": {
+        "category": ["桥梁"],
+        "subcategory": ["基础工程", "桩基础"],
+        "type": ["规范", "指南", "技术规程"],
+        "state": ["设计", "施工"],
+        "keyword": ["桩基", "设计要求", "施工方案"],
+        "name": ""
+      },
+      "spec_filter": {
+        "name": "",
+        "code": ""
+      }
     }
     document_filter = DocumentFilter(**params)
     print(document_filter)

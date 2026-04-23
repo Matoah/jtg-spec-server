@@ -18,3 +18,6 @@ class GraphQueryType(str, Enum):
 
     # 聚类查询：和A相似的都有什么？
     CLUSTERING = "clustering"
+
+    # 实体查询：查询A的详细信息
+    ENTITY_QUERY = "entity_query"

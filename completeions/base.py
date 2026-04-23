@@ -19,6 +19,7 @@ class CompletionLLM(ABC):
             model=spec_server_config.COMPLETION_MODEL,
             max_tokens=spec_server_config.COMPLETION_MAX_TOKEN,
             temperature=spec_server_config.COMPLETION_TEMPERATURE,
+            streaming=spec_server_config.COMPLETION_STREAMING,
             extra_body={
                 "chat_template_kwargs": {
                     "enable_thinking": spec_server_config.COMPLETION_ENABLE_THINKING

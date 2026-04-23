@@ -84,6 +84,28 @@ def _get_document_list(query: str)-> list[str]:
         result = graph.run(cypher, **params)
         return [record["name"] for record in result]
 
+def get_document_md5_list(document_filter: DocumentFilter) -> list[str]:
+    """
+    根据文档筛选条件，获取文档md5列表
+    :param document_filter: 文档筛选条件
+    :return: 文档md5列表
+    """
+    if is_all_empty(document_filter.model_dump()):
+        return []
+    else:
+        where_clause, params = _build_where_clause(document_filter)
+        cypher = f"""
+                    MATCH (s:标准规范)-[:关联文档]->(d:文档)
+                    {where_clause}
+                    RETURN d.文件唯一标识 as md5
+                    LIMIT 20
+                    """
+
+        graph = get_graph()
+
+        result = graph.run(cypher, **params)
+        return [record["md5"] for record in result]
+
 def retrieve_document(query: str, top_k: int = 5) -> list[Document]:
     """检索知识库"""
     document_list = _get_document_list(query)

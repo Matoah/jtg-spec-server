@@ -2,15 +2,22 @@ from pydantic import BaseModel, Field
 from enums.graph_query_type import GraphQueryType
 from typing import List, Dict, Any
 
+class NodeConstraint(BaseModel):
+    """节点约束模型"""
+
+    label: str = Field(description="节点标签")
+
+    constraints: Dict[str, Any] | None = Field(default=None, description="节点约束")
+
 
 class GraphQuery(BaseModel):
     """图库查询模型"""
 
     query_type: GraphQueryType = Field(description="查询类型")
 
-    source_entities: List[str] = Field(default=None, description="源实体列表")
+    source_entities: List[NodeConstraint] = Field(default=None, description="源实体列表")
 
-    target_entities: List[str] = Field(default=None, description="目标实体列表")
+    target_entities: List[NodeConstraint] = Field(default=None, description="目标实体列表")
 
     relation_types: List[str] = Field(default=None, description="关系类型列表")
 

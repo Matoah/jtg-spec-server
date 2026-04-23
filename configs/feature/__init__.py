@@ -711,6 +711,11 @@ class CompletionConfig(BaseSettings):
         default=1024,
     )
 
+    COMPLETION_STREAMING: bool = Field(
+        description="Enable or disable streaming for completion",
+        default=False,
+    )
+
 class KnowledgeConfig(BaseSettings):
     KNOWLEDGE_BASE_URI: str = Field(
         description="Knowledge库基础URI",

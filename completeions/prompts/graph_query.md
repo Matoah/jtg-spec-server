@@ -22,26 +22,63 @@
    - subgraph：需要获取某一实体相关的完整子图，如：某标准规范的全部相关信息
    - path_finding：路径查找，如：标准规范 → 文档 → 公告 → 发布机构
    - clustering：相似内容/结构查询，如：类似某标准的规范有哪些？
+   - entity_query: 查询实体信息，如：某个术语定义信息
 
 2. source_entities（起点实体）
-   - 只包含图中可能存在的具体节点名称
-   - 优先包括：
-     - 标准名称（如："公路工程技术标准"）
-     - 文档名称
-     - 公告编号/标题
-     - 术语名称
-     - 符号（如：E₀）
-     - 组织机构名称
-     - 人员姓名
+   - 格式：
+    ```json
+    [{{
+      "label": "<节点标签>",
+      "constraints": {{
+        "<节点属性>": "<节点属性值>"
+      }}
+    }}]
+    ```
+   - 说明：
+     - label: 必填，必须是Schema中定义的节点类型，例如：
+       - 标准规范
+       - 文档
+       - 公告
+       - 术语
+       - 符号
+       - 人员
+       - 组织机构
+     - constraints: 可选，用于限定具体实体（推荐使用），例如：
+       ```json
+       {{
+         "姓名": "张志新"
+       }}
+       ```
+     - 若用户问题中包含明确实体名称，必须写入constraints中
+   - 示例：
+     - 查询姓名为“张志新”的人员： 
+     ```json
+     [{{"label": "人员", "constraints": {{"姓名": "张志新"}}}}]
+     ```
 
 3. target_entities（目标实体）
-   - 仅在明确需要"终点约束"时填写
-   - 例如：
-     - "术语"
-     - "公式"
-     - "图片"
-     - "组织机构"
-     - "人员"
+   - 格式：
+    ```json
+    [{{
+      "label": "<节点标签>",
+      "constraints": {{
+        "<节点属性>": "<节点属性值>"
+      }}
+    }}]
+    ```
+   - 说明：
+       - label：必填
+       - constraints：可选
+       - 仅在存在明确“查询目标类型”时填写
+   - 示例：
+       - 查询术语：
+       ```json
+       [{{"label": "术语"}}]
+       ```
+       - 查询机构：
+       ```json
+       [{{"label": "组织机构"}}]
+       ```
    - 不确定时返回空数组 []
 
 4. relation_types（关系类型）
@@ -98,18 +135,18 @@
 ## 示例1
 
 - 查询：
-  某标准规范中有哪些术语定义？
+  张志新参与了哪些规范制定?
 - 分析：
-  从“标准规范”出发
-  通过“文档”再到“术语”
+  从“人员”出发
+  通过“文档”再到“标准规范”
   属于 multi_hop
 - 返回：
   ```json
   {{
     "query_type": "multi_hop",
-    "source_entities": ["某标准规范"],
-    "target_entities": ["术语"],
-    "relation_types": ["关联文档", "术语"],
+    "source_entities": [{{"label": "人员", "constraints": {{"姓名": "张志新"}}}}],
+    "target_entities": [{{"label": "标准规范"}}],
+    "relation_types": ["主编", "主审", "主要参编人员", "参加人员", "参审人员", "关联文档"],
     "max_depth": 2,
     "constraints": {{}}
   }}
@@ -118,41 +155,18 @@
 ## 示例2
 
 - 查询：
-  某公告的发布机构是谁？
+  JTG T 3331-03—2024 采空区公路设计与施工技术规范.pdf的参编单位有哪些？
 - 分析：
-  公告 → 发文机关
+  文档 → 组织机构
   单跳 entity_relation
 - 返回：
   ```json
   {{
     "query_type": "entity_relation",
-    "source_entities": ["某公告"],
+    "source_entities": [{{"label": "文档", "constraints": {{"文件名称": "JTG T 3331-03—2024 采空区公路设计与施工技术规范.pdf"}}}}],
     "target_entities": ["组织机构"],
-    "relation_types": ["发文机关"],
+    "relation_types": ["参编单位"],
     "max_depth": 1,
     "constraints": {{}}
-  }}
-  ```
-
-## 示例3
-
-- 查询：
-  “公路工程标准中2020年后发布的有哪些？”
-- 分析：
-  标准规范节点
-  时间过滤属于 constraints
-- 返回：
-  ```json
-  {{
-    "query_type": "subgraph",
-    "source_entities": ["公路工程标准"],
-    "target_entities": [],
-    "relation_types": ["关联文档"],
-    "max_depth": 1,
-    "constraints": {{
-      "时间": {{
-        "发布日期": "2020-01-01之后"
-      }}
-    }}
   }}
   ```

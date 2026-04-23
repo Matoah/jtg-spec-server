@@ -9,6 +9,7 @@ def gateway(state: WorkflowState):
     """
     query = state.query
     gateway_completion = GatewayCompletion()
+    state.thinking = "我已经接收到问题，正在为您处理..."
     result = gateway_completion.ask(query)
     return {
         "content": result.reject_message,

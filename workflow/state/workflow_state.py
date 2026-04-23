@@ -7,6 +7,8 @@ from enums.search_strategy import SearchStrategy
 
 class WorkflowState(BaseModel):
 
+    streaming: bool = Field(default=False, description="是否异步执行")
+
     query: str = Field(description="用户查询信息")
 
     documents: list[Document] = Field(default_factory=list, description="检索到的知识文档")
@@ -16,3 +18,5 @@ class WorkflowState(BaseModel):
     audit_status: AuditStatus = Field(default=AuditStatus.DEFAULT, description="审核状态")
 
     search_strategy: SearchStrategy = Field(default=SearchStrategy.HYBRID_TRADITIONAL, description="搜索策略")
+
+    thinking: str = Field(default="", description="正在处理的内容")
