@@ -76,7 +76,7 @@ def _get_document_list(query: str)-> list[str]:
             MATCH (s:标准规范)-[:关联文档]->(d:文档)
             {where_clause}
             RETURN d.文件名称 as name
-            LIMIT 20
+            LIMIT 50
             """
 
         graph = get_graph()

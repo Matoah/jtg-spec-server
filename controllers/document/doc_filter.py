@@ -23,10 +23,10 @@ class JsonController(Resource):
         feature = args.get("feature")
         json_text,feature_data = try_parse_json_object(feature)
         if is_all_empty(feature_data):
-            return json.dumps([]), 200
+            return [], 200
         else:
             doc_filter = DocumentFilter(**feature_data)
             document_md5_list = get_document_md5_list(doc_filter)
-            return json.dumps(document_md5_list, ensure_ascii=False), 200
+            return document_md5_list, 200
 
 api.add_resource(JsonController, "/doc_filter")
