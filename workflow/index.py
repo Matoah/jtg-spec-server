@@ -43,8 +43,8 @@ builder.add_edge("completion_generator", END)
 checkpointer = InMemorySaver()
 app = builder.compile(checkpointer=checkpointer)
 
-graph_image_path = Path(__file__).parent / "graph.png"
-graph_image_path.write_bytes(app.get_graph().draw_mermaid_png())
+#graph_image_path = Path(__file__).parent / "graph.png"
+#graph_image_path.write_bytes(app.get_graph().draw_mermaid_png())
 
 import random
 import string
