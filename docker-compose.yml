@@ -1,12 +1,11 @@
-version: '3.8'
+name: jtg-spec-server
 
 services:
-  app:
-    build: .
+  flask:
+    image: jtg-spec-server:latest
+    container_name: flask_app
     ports:
       - "5002:5002"
     env_file:
-      - .env
-    volumes:
-      - .:/app
+      - .env                     # 加载同目录下的 .env 文件
     restart: unless-stopped

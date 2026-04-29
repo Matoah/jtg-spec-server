@@ -8,19 +8,20 @@ if (flask_debug := os.environ.get("FLASK_DEBUG", "0")) and flask_debug.lower() i
         "0",
         "no",
     }:
-    from gevent import monkey  # type: ignore
-
-    # gevent
-    monkey.patch_all()
-
-    from grpc.experimental import gevent as grpc_gevent  # type: ignore
-
-    # grpc gevent
-    grpc_gevent.init_gevent()
-
-    import psycogreen.gevent  # type: ignore
-
-    psycogreen.gevent.patch_psycopg()
+    pass
+    # from gevent import monkey  # type: ignore
+    #
+    # # gevent
+    # monkey.patch_all()
+    #
+    # from grpc.experimental import gevent as grpc_gevent  # type: ignore
+    #
+    # # grpc gevent
+    # grpc_gevent.init_gevent()
+    #
+    # import psycogreen.gevent  # type: ignore
+    #
+    # psycogreen.gevent.patch_psycopg()
 
 from app_factory import create_app
 
